@@ -6,6 +6,8 @@ const port = 5000;
 
 app.use(express.json());
 
+const { uuid } = require("uuidv4");
+
 const articles = [
   {
     id: 1,
@@ -50,6 +52,27 @@ app.get("/articles/:id", (req, res) => {
     // set the response status code to 404 (Not Found)
     res.status(404);
     res.json("articles not found");
+  }
+});
+
+//Return all the articles by a specific author
+app.get("/articles/search_1/:author", (req, res) => {
+  const articlesAuthor = req.params.author;
+  // find return 1 value if need return 2 value or more use filter
+  // const found = articles.find((element) => {
+  const found = articles.filter((element) => {
+    return element.author === articlesAuthor;
+  });
+
+  if (found) {
+    // set the response status code to 200 (OK)
+    // sends back a response of the found user
+    res.status(200);
+    res.json(found);
+  } else {
+    // set the response status code to 404 (Not Found)
+    res.status(404);
+    res.json("articles author not found");
   }
 });
 
