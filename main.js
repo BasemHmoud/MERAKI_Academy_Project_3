@@ -6,7 +6,7 @@ const port = 5000;
 
 app.use(express.json());
 
-const { uuid } = require("uuidv4");
+const uuid = require("uuid");
 
 const articles = [
   {
@@ -37,6 +37,7 @@ app.get("/articles", (req, res) => {
 });
 
 //Return an article by a specific id
+
 app.get("/articles/:id", (req, res) => {
   const articlesID = req.params.id;
   const found = articles.find((element) => {
@@ -56,6 +57,7 @@ app.get("/articles/:id", (req, res) => {
 });
 
 //Return all the articles by a specific author
+
 app.get("/articles/search_1/:author", (req, res) => {
   const articlesAuthor = req.params.author;
   // find return 1 value if need return 2 value or more use filter
@@ -74,6 +76,25 @@ app.get("/articles/search_1/:author", (req, res) => {
     res.status(404);
     res.json("articles author not found");
   }
+});
+
+//Return the new article you created
+
+app.post("/articles", (req, res) => {
+  const newArticles = {
+    //random id using uuid.v4()
+    id: uuid.v4(),
+    title: req.body.title,
+    description: req.body.description,
+    author: req.body.author,
+  };
+  // if title or decription or author empty return error 400
+  if (!newArticles.title || !newArticles.description || !newArticles.author) {
+    return res.sendStatus(400);
+  }
+  //add new articles in array articles
+  articles.push(newArticles);
+  res.json(articles);
 });
 
 app.listen(port, () => {
