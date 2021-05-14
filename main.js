@@ -83,7 +83,7 @@ app.get("/articles/search_1/:author", (req, res) => {
 app.post("/articles", (req, res) => {
   const newArticles = {
     //random id using uuid.v4()
-    id: uuid.v4(),
+    id: uuid(),
     title: req.body.title,
     description: req.body.description,
     author: req.body.author,
@@ -97,6 +97,51 @@ app.post("/articles", (req, res) => {
   res.json(articles);
 });
 
+//Return the updating article (after updating it)
+
+app.put("/articles/:id", (req, res) => {
+  let i;
+  const updateArticles = {
+    title: req.body.title,
+    description: req.body.description,
+    author: req.body.author,
+  };
+  const found = articles.find((element, index) => {
+    i = index;
+    return element.id === parseInt(req.params.id);
+  });
+
+  if (found) {
+    res.status(200);
+    articles[i] = updateArticles;
+    res.json(found);
+  } else {
+    res.status(404);
+    res.json("articles not found");
+  }
+});
+/*
+app.delete("/articles/:id", (req, res) => {
+  let i;
+  const updateArticles = {
+    title: req.body.title,
+    description: req.body.description,
+    author: req.body.author,
+  };
+  const found = articles.find((element, index) => {
+    i = index;
+    return element.id === parseInt(req.params.id);
+  });
+
+  if (found) {
+    res.status(200);
+    articles[i] = updateArticles;
+    res.json(found);
+  } else {
+    res.status(404);
+    res.json("articles not found");
+  }
+});*/
 app.listen(port, () => {
   console.log(`server run on port ${port}`);
 });
