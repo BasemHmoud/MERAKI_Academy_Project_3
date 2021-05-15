@@ -1,3 +1,4 @@
+const e = require("express");
 const express = require("express");
 
 const app = express();
@@ -147,7 +148,22 @@ app.delete("/articles/:id", (req, res) => {
 });
 
 
+app.delete("/articles/:author", (req, res) => {
+  let i;
+  const delArticlesAuthor = req.params.author;
+  const found = articles.filter((element, index) => {
+    i = index;
+ if(element.author===delArticlesAuthor ){
+   articles.splice(i,1)
+ }
+ msgDelete={
+  success: true,
+    massage: `Success delete all the articles for the    ${author}`,
+}
+ res.json(msgDelete)
 
+})
+})
 app.listen(port, () => {
   console.log(`server run on port ${port}`);
 });
