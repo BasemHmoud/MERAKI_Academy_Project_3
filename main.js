@@ -114,34 +114,40 @@ app.put("/articles/:id", (req, res) => {
   if (found) {
     res.status(200);
     articles[i] = updateArticles;
-    res.json(found);
+    res.json(articles);
   } else {
     res.status(404);
     res.json("articles not found");
   }
 });
-/*
+
+//Return an object with keys called success with value true and a massage
+
+
+const msg ={
+  success : true,
+  value : "Success Delete article with id"
+}
 app.delete("/articles/:id", (req, res) => {
   let i;
-  const updateArticles = {
-    title: req.body.title,
-    description: req.body.description,
-    author: req.body.author,
-  };
-  const found = articles.find((element, index) => {
+  const delArticles = req.params.id;
+  const found = articles.filter((element, index) => {
     i = index;
-    return element.id === parseInt(req.params.id);
+    return element.id === parseInt(delArticles); 
   });
-
   if (found) {
     res.status(200);
-    articles[i] = updateArticles;
-    res.json(found);
+    articles.splice(i, 1);
+   // res.json(articles)
+    res.json(msg)
   } else {
     res.status(404);
     res.json("articles not found");
   }
-});*/
+});
+
+
+
 app.listen(port, () => {
   console.log(`server run on port ${port}`);
 });
