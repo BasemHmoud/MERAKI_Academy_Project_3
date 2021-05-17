@@ -163,29 +163,48 @@ app.delete("/articles/:author", (req, res) => {
   });
 });*/
 
-  app.post("/users", (req, res) => {
-    //read information from body
-    const { firstName, lastName, age, country, email, password } = req.body;
-    const newAuthor = new Users({
-      firstName,
-      lastName,
-      age,
-      country,
-      email,
-      password,
-    });
-    //save information
-    newAuthor
-      .save()
-      .then((result) => {
-        res.status(201);
-        res.json(result);
-        
-      })
-      .catch((err) => {
-        res.json(err);
-      });
+app.post("/users", (req, res) => {
+  //read information from body
+  const { firstName, lastName, age, country, email, password } = req.body;
+  const newAuthor = new Users({
+    firstName,
+    lastName,
+    age,
+    country,
+    email,
+    password,
   });
+  //save information
+  newAuthor
+    .save()
+    .then((result) => {
+      res.status(201);
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+app.post("/articles", (req, res) => {
+  //read information from body
+  const { title, description, author } = req.body;
+  const newArticles = new Articles({
+    title,
+    description,
+    author
+  });
+  //save information
+  newArticles
+    .save()
+    .then((result) => {
+      res.status(201);
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
 
 
 app.listen(port, () => {

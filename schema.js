@@ -12,7 +12,7 @@ const usersSchema = new mongoose.Schema({
 const articlesSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String },
-  author: { type: mongoose.Schema.ObjectId,ref:"articles" },
+  author: { type: mongoose.Schema.ObjectId,ref:"Users" },
 });
 
 module.exports.Users = mongoose.model("Users", usersSchema);
