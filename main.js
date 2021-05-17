@@ -1,4 +1,3 @@
-const e = require("express");
 const express = require("express");
 
 const app = express();
@@ -6,9 +5,11 @@ const app = express();
 const port = 5000;
 
 app.use(express.json());
+const db = require("./db");
+const usersModul = require("./schema");
 
 const uuid = require("uuid");
-
+/*
 const articles = [
   {
     id: 1,
@@ -124,46 +125,43 @@ app.put("/articles/:id", (req, res) => {
 
 //Return an object with keys called success with value true and a massage
 
-
-const msg ={
-  success : true,
-  value : "Success Delete article with id"
-}
+const msg = {
+  success: true,
+  value: "Success Delete article with id",
+};
 app.delete("/articles/:id", (req, res) => {
   let i;
   const delArticles = req.params.id;
   const found = articles.filter((element, index) => {
     i = index;
-    return element.id === parseInt(delArticles); 
+    return element.id === parseInt(delArticles);
   });
   if (found) {
     res.status(200);
     articles.splice(i, 1);
-   // res.json(articles)
-    res.json(msg)
+    // res.json(articles)
+    res.json(msg);
   } else {
     res.status(404);
     res.json("articles not found");
   }
 });
 
-
 app.delete("/articles/:author", (req, res) => {
   let i;
   const delArticlesAuthor = req.params.author;
   const found = articles.filter((element, index) => {
     i = index;
- if(element.author===delArticlesAuthor ){
-   articles.splice(i,1)
- }
- msgDelete={
-  success: true,
-    massage: `Success delete all the articles for the    ${author}`,
-}
- res.json(msgDelete)
-
-})
-})
+    if (element.author === delArticlesAuthor) {
+      articles.splice(i, 1);
+    }
+    msgDelete = {
+      success: true,
+      massage: `Success delete all the articles for the    ${author}`,
+    };
+    res.json(msgDelete);
+  });
+});*/
 app.listen(port, () => {
   console.log(`server run on port ${port}`);
 });
