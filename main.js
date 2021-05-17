@@ -192,7 +192,7 @@ app.post("/articles", (req, res) => {
   const newArticles = new Articles({
     title,
     description,
-    author
+    author,
   });
   //save information
   newArticles
@@ -205,7 +205,16 @@ app.post("/articles", (req, res) => {
       res.json(err);
     });
 });
-
+//get all articles
+app.get("/articles", (req, res) => {
+  Articles.find()
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
 
 app.listen(port, () => {
   console.log(`server run on port ${port}`);
