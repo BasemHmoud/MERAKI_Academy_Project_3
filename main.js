@@ -7,7 +7,7 @@ const port = 5000;
 app.use(express.json());
 const db = require("./db");
 const usersModul = require("./schema");
-
+const { Users, Articles } = require("./schema");
 const uuid = require("uuid");
 /*
 const articles = [
@@ -162,6 +162,32 @@ app.delete("/articles/:author", (req, res) => {
     res.json(msgDelete);
   });
 });*/
+
+  app.post("/users", (req, res) => {
+    //read information from body
+    const { firstName, lastName, age, country, email, password } = req.body;
+    const newAuthor = new Users({
+      firstName,
+      lastName,
+      age,
+      country,
+      email,
+      password,
+    });
+    //save information
+    newAuthor
+      .save()
+      .then((result) => {
+        res.status(201);
+        res.json(result);
+        
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+
+
 app.listen(port, () => {
   console.log(`server run on port ${port}`);
 });

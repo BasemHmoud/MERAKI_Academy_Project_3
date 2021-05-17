@@ -15,5 +15,5 @@ const articlesSchema = new mongoose.Schema({
   author: { type: mongoose.Schema.ObjectId,ref:"articles" },
 });
 
-module.exports = mongoose.model("users", usersSchema);
-module.exports = mongoose.model("articles", articlesSchema);
+module.exports.Users = mongoose.model("Users", usersSchema);
+module.exports.Articles = mongoose.model("Articles", articlesSchema);
