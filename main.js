@@ -7,7 +7,7 @@ const port = 5000;
 app.use(express.json());
 const db = require("./db");
 const usersModul = require("./schema");
-const { Users, Articles,Comments } = require("./schema");
+const { Users, Articles, Comments } = require("./schema");
 
 //done
 app.post("/users", (req, res) => {
@@ -158,6 +158,28 @@ app.delete("/articles1/:author", async (req, res) => {
 
     .then((result) => {
       res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+//login
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+  Users.findOne({ email: email,password:password })
+    .then((result) => {
+      if (result) {
+        res.status(200);
+        res.json("Valid login credentials");
+      } else {
+        res.status(401);
+        res.json("Invalid  login credentials");
+      }
+
+      if (!result) {
+        res.status(404);
+        res.json("Invalid  login credentials");
+      }
     })
     .catch((err) => {
       res.json(err);
