@@ -8,8 +8,6 @@ app.use(express.json());
 const db = require("./db");
 const usersModul = require("./schema");
 const { Users, Articles } = require("./schema");
- 
-
 
 //done
 app.post("/users", (req, res) => {
@@ -112,30 +110,60 @@ app.get("/articles/author/:author", async (req, res) => {
 });
 
 // updateAnArticleById
-app.put("/articles/update/:id",(req,res)=>{
-  ID=req.params.id;
+app.put("/articles/update/:id", (req, res) => {
+  ID = req.params.id;
   //Articles.findOneAndUpdate option2 to solve
-  Articles.findOneAndReplace ({author:ID},{title:req.body.title,description:req.body.description,})
-  .then((result)=>{
-    res.json(result);
-  })
-  .catch((err)=>{
-    res.json(err)
-  })
-})
+  Articles.findOneAndReplace(
+    { author: ID },
+    { title: req.body.title, description: req.body.description }
+  )
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
 
 //delete An Article By Id
-app.delete("/articles/:id",(req,res)=>{
-  ID=req.params.id;
+app.delete("/articles/:id", (req, res) => {
+  ID = req.params.id;
   //Articles.findOneAndDelete option2 to solve
-  Articles.findOneAndDelete  ({_id:ID})
-  .then((result)=>{
-    res.json(result);
-  })
-  .catch((err)=>{
-    res.json(err)
-  })
-})
+  Articles.findOneAndDelete({ _id: ID })
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+//deleteArticlesByAuthor
+
+app.delete("/articles1/:author", async (req, res) => {
+  const author = req.params.author;
+  let id;
+  await Users
+    //.findOne({_id:ID})
+    .findOne({ firstName: author })
+    .then((result) => {
+      // id
+
+      id = result._id;
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+
+  Articles.findOneAndDelete({ author: id })
+
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
 app.listen(port, () => {
   console.log(`server run on port ${port}`);
 });
