@@ -231,6 +231,37 @@ app.get("/articles/:id", (req, res) => {
     });
 });
 
+//git article by id done
+
+app.get("/articles/author/:author", async (req, res) => {
+  const author = req.params.author;
+  let id;
+  await Users
+    //.findOne({_id:ID})
+    .findOne({ firstName: author })
+    .then((result) => {
+      // id
+
+      id = result._id;
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+
+  Articles.find({ author: id })
+    /*
+    display just author first name and last name without id
+    ("author", 'firstName lastName -_id')*/
+    .populate("author", "firstName lastName -_id")
+    .exec()
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
 app.listen(port, () => {
   console.log(`server run on port ${port}`);
 });
