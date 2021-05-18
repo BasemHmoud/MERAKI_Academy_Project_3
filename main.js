@@ -162,7 +162,7 @@ app.delete("/articles/:author", (req, res) => {
     res.json(msgDelete);
   });
 });*/
-
+//done
 app.post("/users", (req, res) => {
   //read information from body
   const { firstName, lastName, age, country, email, password } = req.body;
@@ -185,7 +185,7 @@ app.post("/users", (req, res) => {
       res.json(err);
     });
 });
-
+//done
 app.post("/articles", (req, res) => {
   //read information from body
   const { title, description, author } = req.body;
@@ -205,9 +205,24 @@ app.post("/articles", (req, res) => {
       res.json(err);
     });
 });
-//get all articles
+//get all articles done
 app.get("/articles", (req, res) => {
   Articles.find()
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+//git article by author done
+//return id in article not user
+app.get("/articles/:id", (req, res) => {
+  const ID = req.params.id;
+  Articles
+    //.findOne({_id:ID})
+    .findById(ID)
     .then((result) => {
       res.json(result);
     })
