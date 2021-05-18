@@ -12,8 +12,14 @@ const usersSchema = new mongoose.Schema({
 const articlesSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String },
-  author: { type: mongoose.Schema.ObjectId,ref:"Users" },
+  author: { type: mongoose.Schema.ObjectId, ref: "Users" },
+  comments:[{type: mongoose.Schema.ObjectId, ref: "Users"}]
 });
 
+const commentsSchema = new mongoose.Schema({
+  comment: { type: String, required: true },
+  commenter:{type: mongoose.Schema.ObjectId, ref: "Users"},
+});
 module.exports.Users = mongoose.model("Users", usersSchema);
 module.exports.Articles = mongoose.model("Articles", articlesSchema);
+module.exports.Comments = mongoose.model("Comments", articlesSchema);

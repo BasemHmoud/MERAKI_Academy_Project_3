@@ -7,7 +7,7 @@ const port = 5000;
 app.use(express.json());
 const db = require("./db");
 const usersModul = require("./schema");
-const { Users, Articles } = require("./schema");
+const { Users, Articles,Comments } = require("./schema");
 
 //done
 app.post("/users", (req, res) => {
