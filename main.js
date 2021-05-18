@@ -8,7 +8,125 @@ app.use(express.json());
 const db = require("./db");
 const usersModul = require("./schema");
 const { Users, Articles } = require("./schema");
-const uuid = require("uuid");
+ 
+
+
+//done
+app.post("/users", (req, res) => {
+  //read information from body
+  const { firstName, lastName, age, country, email, password } = req.body;
+  const newAuthor = new Users({
+    firstName,
+    lastName,
+    age,
+    country,
+    email,
+    password,
+  });
+  //save information
+  newAuthor
+    .save()
+    .then((result) => {
+      res.status(201);
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+//done
+app.post("/articles", (req, res) => {
+  //read information from body
+  const { title, description, author } = req.body;
+  const newArticles = new Articles({
+    title,
+    description,
+    author,
+  });
+  //save information
+  newArticles
+    .save()
+    .then((result) => {
+      res.status(201);
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+//get all articles done
+app.get("/articles", (req, res) => {
+  Articles.find()
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+//git article by author done
+//return id in article not user
+app.get("/articles/:id", (req, res) => {
+  const ID = req.params.id;
+  Articles
+    //.findOne({_id:ID})
+    .findById(ID)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+//git article by id done
+
+app.get("/articles/author/:author", async (req, res) => {
+  const author = req.params.author;
+  let id;
+  await Users
+    //.findOne({_id:ID})
+    .findOne({ firstName: author })
+    .then((result) => {
+      // id
+
+      id = result._id;
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+
+  Articles.find({ author: id })
+    /*
+    display just author first name and last name without id
+    ("author", 'firstName lastName -_id')*/
+    .populate("author", "firstName lastName -_id")
+    .exec()
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+// updateAnArticleById
+app.put("/articles/update/:id",(req,res)=>{
+  ID=req.params.id;
+  //Articles.findOneAndUpdate option2 to solve
+  Articles.findOneAndReplace ({author:ID},{title:req.body.title,description:req.body.description,})
+  .then((result)=>{
+    res.json(result);
+  })
+  .catch((err)=>{
+    res.json(err)
+  })
+})
+app.listen(port, () => {
+  console.log(`server run on port ${port}`);
+});
+
 /*
 const articles = [
   {
@@ -162,106 +280,3 @@ app.delete("/articles/:author", (req, res) => {
     res.json(msgDelete);
   });
 });*/
-//done
-app.post("/users", (req, res) => {
-  //read information from body
-  const { firstName, lastName, age, country, email, password } = req.body;
-  const newAuthor = new Users({
-    firstName,
-    lastName,
-    age,
-    country,
-    email,
-    password,
-  });
-  //save information
-  newAuthor
-    .save()
-    .then((result) => {
-      res.status(201);
-      res.json(result);
-    })
-    .catch((err) => {
-      res.json(err);
-    });
-});
-//done
-app.post("/articles", (req, res) => {
-  //read information from body
-  const { title, description, author } = req.body;
-  const newArticles = new Articles({
-    title,
-    description,
-    author,
-  });
-  //save information
-  newArticles
-    .save()
-    .then((result) => {
-      res.status(201);
-      res.json(result);
-    })
-    .catch((err) => {
-      res.json(err);
-    });
-});
-//get all articles done
-app.get("/articles", (req, res) => {
-  Articles.find()
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((err) => {
-      res.json(err);
-    });
-});
-
-//git article by author done
-//return id in article not user
-app.get("/articles/:id", (req, res) => {
-  const ID = req.params.id;
-  Articles
-    //.findOne({_id:ID})
-    .findById(ID)
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((err) => {
-      res.json(err);
-    });
-});
-
-//git article by id done
-
-app.get("/articles/author/:author", async (req, res) => {
-  const author = req.params.author;
-  let id;
-  await Users
-    //.findOne({_id:ID})
-    .findOne({ firstName: author })
-    .then((result) => {
-      // id
-
-      id = result._id;
-    })
-    .catch((err) => {
-      res.json(err);
-    });
-
-  Articles.find({ author: id })
-    /*
-    display just author first name and last name without id
-    ("author", 'firstName lastName -_id')*/
-    .populate("author", "firstName lastName -_id")
-    .exec()
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((err) => {
-      res.json(err);
-    });
-});
-
-app.listen(port, () => {
-  console.log(`server run on port ${port}`);
-});
