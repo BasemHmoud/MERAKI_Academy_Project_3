@@ -123,6 +123,19 @@ app.put("/articles/update/:id",(req,res)=>{
     res.json(err)
   })
 })
+
+//delete An Article By Id
+app.delete("/articles/:id",(req,res)=>{
+  ID=req.params.id;
+  //Articles.findOneAndDelete option2 to solve
+  Articles.findOneAndDelete  ({_id:ID})
+  .then((result)=>{
+    res.json(result);
+  })
+  .catch((err)=>{
+    res.json(err)
+  })
+})
 app.listen(port, () => {
   console.log(`server run on port ${port}`);
 });
