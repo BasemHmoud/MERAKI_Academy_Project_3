@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/BasemHmoud/MERAKI_Academy_Project_3#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "express": "^4.17.1",
     "mongoose": "^5.12.9",
     "uuid": "^8.3.2",

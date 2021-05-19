@@ -8,7 +8,7 @@ app.use(express.json());
 const db = require("./db");
 const usersModul = require("./schema");
 const { Users, Articles, Comments } = require("./schema");
-
+const bcrypt=require("bcrypt")
 //done
 app.post("/users", (req, res) => {
   //read information from body
@@ -185,6 +185,29 @@ app.post("/login", (req, res) => {
       res.json(err);
     });
 });
+
+app.post("/articles/:id/comments", (req, res) => {
+  //read information from body
+   
+  const  comment = req.body.comment;//
+  const   commenter= req.params.id;//
+  const newComments = new Comments({
+    comment,
+    commenter,
+  });
+  //save information
+  newComments
+    .save()
+    .then((result) => {
+      res.status(201);
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+
 
 app.listen(port, () => {
   console.log(`server run on port ${port}`);
