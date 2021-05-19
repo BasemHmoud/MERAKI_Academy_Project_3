@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 const options = {
     useCreateIndex: true,
     useFindAndModify: true,
@@ -7,6 +8,7 @@ const options = {
   }
 
   //project_3_v01 يتم انشاء قاعدة بيانات اسمها 
-mongoose.connect("mongodb://localhost:27017/project_3_v01", options).then(
+  //encryption link db using dotenv
+mongoose.connect(process.env.DATABASE, options).then(
     ()=>{console.log("Db connected");},
     (err)=>{console.log(err);})

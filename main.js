@@ -1,14 +1,17 @@
 const express = require("express");
+const db = require("./db");
+const usersModule = require("./schema");
+const { Users, Articles, Comments } = require("./schema");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const app = express();
-
-const port = 5000;
-
 app.use(express.json());
-const db = require("./db");
-const usersModul = require("./schema");
-const { Users, Articles, Comments } = require("./schema");
-const bcrypt=require("bcrypt")
+
+//convert const port =3000 to
+//you must add after require("dotenv").config();
+const port = process.env.PORT;
 //done
 app.post("/users", (req, res) => {
   //read information from body
@@ -166,7 +169,7 @@ app.delete("/articles1/:author", async (req, res) => {
 //login
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
-  Users.findOne({ email: email,password:password })
+  Users.findOne({ email: email, password: password })
     .then((result) => {
       if (result) {
         res.status(200);
@@ -188,9 +191,9 @@ app.post("/login", (req, res) => {
 
 app.post("/articles/:id/comments", (req, res) => {
   //read information from body
-   
-  const  comment = req.body.comment;//
-  const   commenter= req.params.id;//
+
+  const comment = req.body.comment; //
+  const commenter = req.params.id; //
   const newComments = new Comments({
     comment,
     commenter,
@@ -207,12 +210,30 @@ app.post("/articles/:id/comments", (req, res) => {
     });
 });
 
-
-
 app.listen(port, () => {
   console.log(`server run on port ${port}`);
 });
-
+app.post("/user",(req,res)=>{
+  const { firstName, lastName, age, country, email, password } = req.body;
+  const newAuthor = new Users({
+    firstName,
+    lastName,
+    age,
+    country,
+    email,
+    password,
+  });
+  //save information
+  newAuthor
+    .save()
+    .then((result) => {
+      res.status(201);
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+})
 /*
 const articles = [
   {
