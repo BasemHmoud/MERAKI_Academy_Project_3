@@ -209,11 +209,7 @@ app.post("/articles/:id/comments", (req, res) => {
       res.json(err);
     });
 });
-
-app.listen(port, () => {
-  console.log(`server run on port ${port}`);
-});
-app.post("/user",(req,res)=>{
+app.post("/user", (req, res) => {
   const { firstName, lastName, age, country, email, password } = req.body;
   const newAuthor = new Users({
     firstName,
@@ -233,7 +229,60 @@ app.post("/user",(req,res)=>{
     .catch((err) => {
       res.json(err);
     });
-})
+});
+// refactor login [Level 1] to add authentication
+app.post("/login1", (req, res) => {
+  //find the user
+  //compare password
+  //check for email first and password second using if
+  //email and password correct res
+  //email is wrong and status 404 res
+  //password is wrong and status 403 res
+  const { email, password } = req.body;
+  //console.log(password);
+  // console.log(email);
+  Users.findOne({ email }).then((result) => {
+    if (!result) {
+      res.status(404);
+      res.json("The email doesn't exist");
+    }
+
+    const options = {
+      //expiresIn: "2000" ms
+      //expiresIn: "60s"
+      //expiresIn: "60m"
+      //expiresIn: "60h"
+      //expiresIn: "1d"
+
+      expiresIn: "60m",
+    };
+    const secret = process.env.SECRET;
+    const payload = {
+      userId: result._id,
+      country: result.country,
+    };
+    const token = jwt.sign(payload, secret, options);
+    bcrypt.compare(password, result.password, (err, result1) => {
+      console.log("compare pass " + password);
+      console.log("compare result.password " + result.password);
+      console.log("compare token " + token);
+
+      if (result1) {
+        console.log("check pass " + result1);
+        res.json(token);
+        console.log("done");
+      } else {
+        res.status(403);
+        res.json("The password you’ve entered is incorrect");
+      }
+    }); //end compare
+  });
+});
+
+app.listen(port, () => {
+  console.log(`server run on port ${port}`);
+});
+
 /*
 const articles = [
   {
