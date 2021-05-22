@@ -8,6 +8,7 @@ const usersSchema = new mongoose.Schema({
   country: { type: String },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  role:[{type: mongoose.Schema.ObjectId, ref: "Roles"}]
 });
 //On the users schema add a mongoose pre middleware on save event (ES5 function) that will:
 usersSchema.pre("save",async function(){
@@ -34,5 +35,5 @@ const rolesSchema=new mongoose.Schema({
 })
 module.exports.Users = mongoose.model("Users", usersSchema);
 module.exports.Articles = mongoose.model("Articles", articlesSchema);
-module.exports.Comments = mongoose.model("Comments", articlesSchema);
+module.exports.Comments = mongoose.model("Comments", commentsSchema);
 module.exports.Roles = mongoose.model("Roles", rolesSchema);
