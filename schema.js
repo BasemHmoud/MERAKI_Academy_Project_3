@@ -28,6 +28,11 @@ const commentsSchema = new mongoose.Schema({
   comment: { type: String, required: true },
   commenter:{type: mongoose.Schema.ObjectId, ref: "Users"},
 });
+const rolesSchema=new mongoose.Schema({
+  role:{type:String},
+  permissions:[{type:String}]
+})
 module.exports.Users = mongoose.model("Users", usersSchema);
 module.exports.Articles = mongoose.model("Articles", articlesSchema);
 module.exports.Comments = mongoose.model("Comments", articlesSchema);
+module.exports.Roles = mongoose.model("Roles", rolesSchema);

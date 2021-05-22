@@ -1,7 +1,7 @@
 const express = require("express");
 const db = require("./db");
 const usersModule = require("./schema");
-const { Users, Articles, Comments } = require("./schema");
+const { Users, Articles, Comments,Roles} = require("./schema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -12,6 +12,7 @@ app.use(express.json());
 //convert const port =3000 to
 //you must add after require("dotenv").config();
 const port = process.env.PORT;
+const secret = process.env.SECRET;
 //done
 app.post("/users", (req, res) => {
   //read information from body
@@ -188,8 +189,27 @@ app.post("/login", (req, res) => {
       res.json(err);
     });
 });
-
-app.post("/articles/:id/comments", (req, res) => {
+const auth = (req, res, next) => {
+  //if the token is invalid then send a response back with
+  //the status code 403 and a message of forbidden
+  if (!req.headers.authorization) {
+    return res.send({
+      massage: "invalid token",
+      status: "403",
+    });
+  }
+  const token = req.headers.authorization.split(" ")[1];
+  jwt.verify(token, secret, (err, result) => {
+    if (err) {
+      return res.json(err);
+    } if(result) {
+      req.token = result;
+      console.log("req.token " + req.token);
+      next();
+    }
+  });
+};
+app.post("/articles/:id/comments", auth, (req, res) => {
   //read information from body
 
   const comment = req.body.comment; //
@@ -202,6 +222,7 @@ app.post("/articles/:id/comments", (req, res) => {
   newComments
     .save()
     .then((result) => {
+      console.log("articles result" + result);
       res.status(201);
       res.json(result);
     })
@@ -256,7 +277,7 @@ app.post("/login1", (req, res) => {
 
       expiresIn: "60m",
     };
-    const secret = process.env.SECRET;
+    //const secret = process.env.SECRET;
     const payload = {
       userId: result._id,
       country: result.country,
@@ -278,6 +299,8 @@ app.post("/login1", (req, res) => {
     }); //end compare
   });
 });
+
+/////////////////////////////////////////////////////////
 
 app.listen(port, () => {
   console.log(`server run on port ${port}`);
