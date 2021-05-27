@@ -8,11 +8,14 @@ const usersRouter = require('./routers/routes/users');
 const authRouter = require('./routers/routes/auth');
 const commentsRouter = require('./routers/routes/comments');
 const roleRouter = require('./routers/routes/role');
+const cors = require('cors')
 
 const app = express();
 
 //built-in middleware
 app.use(express.json());
+app.use(cors());
+
 
 // router middleware
 app.use('/users', usersRouter);

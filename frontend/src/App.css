@@ -1,0 +1,14 @@
+.Register{
+    
+margin: 20px;
+}
+.btnRegister{
+    background-color: #0D6EFD;
+    color: white;
+    width: 400px;
+
+}
+.inputRegister{
+    width: 400px;
+    height: 25px;
+}
